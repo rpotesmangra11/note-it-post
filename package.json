@@ -1,0 +1,21 @@
+{
+  "name": "post-it-note-api",
+  "version": "1.0.0",
+  "description": "Post-it note API test project ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ravi Potes Mangra",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "cypress": "^13.11.0",
+    "express": "^4.19.2",
+    "node": "^20.14.0",
+    "node-fetch": "^3.3.2",
+    "sqlite3": "^5.1.7",
+    "uuid": "^9.0.1"
+  }
+}

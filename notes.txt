@@ -1,0 +1,15 @@
+Yes, you can use SQLite for local development and then switch to a different database, like PostgreSQL, for deployment on Heroku. Here's how you can do it:
+
+Local Development with SQLite: Continue using SQLite as you are currently doing for local development. Your current setup is fine for this.
+
+Deployment with PostgreSQL on Heroku: When you're ready to deploy your application, you'll need to modify your application to use PostgreSQL. Here's how you can do it:
+
+Install the pg package: This is the Node.js driver for PostgreSQL. You can install it with npm install pg.
+
+Modify your database connection: Replace the SQLite connection with a PostgreSQL connection. You can use the DATABASE_URL environment variable provided by Heroku to connect to the PostgreSQL database. Here's an example:
+
+Modify your database queries: SQL syntax can vary slightly between SQLite and PostgreSQL. Make sure all your queries are compatible with PostgreSQL.
+
+Environment Variables: You can use environment variables to determine which database to use. For example, you could check if process.env.DATABASE_URL is defined, and if it is, connect to PostgreSQL; otherwise, connect to SQLite. This way, your application will automatically use the correct database depending on where it's running.
+
+Remember to add the pg package to your package.json file and to create a Procfile to tell Heroku how to start your application. Also, make sure to provision a Heroku Postgres database from the "Resources" tab in your Heroku dashboard.
