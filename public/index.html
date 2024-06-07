@@ -4,12 +4,8 @@
     <meta charset="utf-8" />
     <title>Note it Post</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-      href="public/css/style.css"
-    />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:;">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
   </head>
   <body>
     <div id="main-container" data-cy="main-container">
@@ -48,6 +44,6 @@
 
     <div id="notes-placeholder" data-cy="notes-placeholder"></div>
 
-    <script src="public/js/app.js"></script>
+    <script src="/js/app.js"></script>
   </body>
 </html>
