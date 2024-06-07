@@ -4,7 +4,7 @@
   "description": "Note creation API test project ",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node js/server.js"
   },
   "author": "Ravi Potes Mangra",
   "license": "ISC",
