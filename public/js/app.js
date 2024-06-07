@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+      mode: 'no-cors'
     })
       .then((response) => response.json())
       .then((data) => {
@@ -38,7 +39,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     console.log("Tag for retrieval:", tag)
 
     // Send a GET request to retrieve notes
-    fetch("https://note-it-post-fa034b9f6252.herokuapp.com/notes")
+    fetch("https://note-it-post-fa034b9f6252.herokuapp.com/notes", { mode: 'no-cors' })
       .then((response) => response.json())
       .then((data) => {
         console.log("Notes retrieved:", data)
