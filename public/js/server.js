@@ -8,6 +8,11 @@ const dir = `${__dirname}/public/`;
 //Initialize the express app
 const app = express();
 
+app.use(function(req, res, next) {
+  res.header("Content-Security-Policy", "default-src 'self' https://note-it-post-fa034b9f6252.herokuapp.com");
+  return next();
+});
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -124,8 +129,7 @@ app.get("*", (req, res) => {
 });
 
 // Use the PORT environment variable provided by Heroku or default to 3000
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
-app.listen(process.env.PORT || 8080);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
+});

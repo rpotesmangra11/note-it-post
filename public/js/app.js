@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     console.log("Data sent to server:", data)
 
     // Send a POST request to create the note
-    fetch("http://localhost:3000/notes", {
+    fetch("https://note-it-post-fa034b9f6252.herokuapp.com/notes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     console.log("Tag for retrieval:", tag)
 
     // Send a GET request to retrieve notes
-    fetch("http://localhost:3000/notes")
+    fetch("https://note-it-post-fa034b9f6252.herokuapp.com/notes")
       .then((response) => response.json())
       .then((data) => {
         console.log("Notes retrieved:", data)
