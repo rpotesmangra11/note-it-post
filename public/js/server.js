@@ -8,10 +8,12 @@ const dir = `${__dirname}/public/`;
 //Initialize the express app
 const app = express();
 
-app.use(function(req, res, next) {
-  res.header("Content-Security-Policy", "default-src 'self' https://note-it-post-fa034b9f6252.herokuapp.com");
-  return next();
-});
+// Configure CORS to allow requests from specific origins
+app.use(cors({
+  origin: 'https://note-it-post-fa034b9f6252.herokuapp.com/notes',
+  methods: 'GET,PUT,POST,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type, Authorization'
+}));
 
 app.use(cors());
 app.use(bodyParser.json());
