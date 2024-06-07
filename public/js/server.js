@@ -8,6 +8,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 let db = new sqlite3.Database(":memory:", (err) => {
   if (err) {
     console.error("Failed to connect to the SQLite database:", err.message);
