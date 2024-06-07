@@ -1,7 +1,7 @@
 {
   "name": "post-it-note-api",
   "version": "1.0.0",
-  "description": "Post-it note API test project ",
+  "description": "Note creation API test project ",
   "main": "index.js",
   "scripts": {
     "start": "node server.js"
