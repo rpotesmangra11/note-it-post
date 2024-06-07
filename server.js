@@ -39,7 +39,7 @@ const postNotes = (req, res) => {
         return res.status(400).json({ error: err.message });
       }
       console.log(`Note created with ID: ${id}`);
-      return res.json({ id: id, note: note, tag: tag });
+      return res.status(201).json({ id: id, note: note, tag: tag });
     }
   );
 };

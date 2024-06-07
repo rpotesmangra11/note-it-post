@@ -4,7 +4,7 @@
   "description": "Post-it note API test project ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "author": "Ravi Potes Mangra",
   "license": "ISC",

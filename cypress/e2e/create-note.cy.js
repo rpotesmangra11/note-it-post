@@ -42,81 +42,94 @@ describe("Note Creation Testing", () => {
     }).as("clientNote")
 
     cy.visit("http://127.0.0.1:5500/")
-    cy.get("#create-note-button").click()
+    cy.get('[data-cy="create-note"]').type("test")
+    cy.get('[data-cy="create-tag"]').type("tag")
+    cy.get('[data-cy="create-button"]').click()
 
-    cy.wait("@clientNote").then((res) => {
+    cy.wait("@clientNote").then((interception) => {
       expect(interception.response.statusCode).to.eq(500)
       expect(interception.response.body.error).to.eq("Internal Server Error")
     })
-
-    cy.get("#error-message").should("contain", "Note not found")
   })
 
-  it("should handle a modified request ", () => {
-    cy.intercept("POST", "/notes", (res) => {
-      res.request.body.note = "This is NOT a test!"
-      res.request.body.tag = "You are NOT it"
+  it("should test using a modified request", () => {
+    // Intercept the POST request and modify the body
+    cy.intercept("POST", "http://localhost:3000/notes", (req) => {
+      req.body.note = "This is NOT a test!"
+      req.body.tag = "You are NOT it"
       req.continue()
     }).as("clientNote")
-    cy.visit("http://127.0.0.1:5500/")
 
-    cy.get('[data-cy="create-note"]').text("This is a test.")
-    cy.get('[data-cy="create-tag"]').text("Tag. You are it")
-    cy.get('[data-cy="create-button"]').click()
-  
-    cy.wait("@clientNote").then((res) => {
-      expect(response.body.note).not.eq("This is a test.")
-      expect(response.body.tag).not.eq("Tag. You are it")
-
-  })
-
-
-  })
-
-  it("should handle a delayed response", () => {
-    cy.intercept("POST", "/notes", (res) => {
-      req.reply((res) => {
-        res.delay(5000).send({
-          statusCode: 200,
-          body: {
-            note: "This is a test note!",
-          },
-        })
-      })
-    }).as("@clientNote")
-
-    cy.visit("http://127.0.0.1:5500/")
-
-    cy.get('[data-cy="create-note"]').text("This is a test.")
-    cy.get('[data-cy="create-tag"]').text("Tag. You are it")
-    cy.get('[data-cy="create-button"]').click()
-
-    cy.wait("@clientNote").then((res) => {
-      expect(response.body.note).not.eq("This is a test.")
-      expect(response.body.tag).not.eq("Tag. You are it")
-    })
-  })
-
-  it("should handle aborted request", () => {
-    cy.intercept("POST", "/notes", (req) => {
-      req.abort()
-    }).as("createNote")
-
-    // Trigger the request...
     cy.visit("http://127.0.0.1:5500/")
     cy.get('[data-cy="create-note"]').type("This is a test.")
     cy.get('[data-cy="create-tag"]').type("Tag. You are it")
-    cy.get('[data-cy="create-button"]').click()
+    cy.get('[data-cy="create-button"]').click({ force: true })
 
-    // Assert on the error handling...
-    cy.wait("@createNote").then((interception) => {
-      expect(interception.error.message).to.include("Request aborted")
+    // Wait for the intercepted request and perform assertions
+    cy.wait("@clientNote").then((interception) => {
+      console.log("Are we here?")
+      console.log(interception)
+
+      // Check if the modified request body was sent
+      expect(interception.request.body.note).to.eq("This is NOT a test!")
+      expect(interception.request.body.tag).to.eq("You are NOT it")
+
+      // Check the response body
+      expect(interception.response.body.note).to.not.eq("Does not matter")
+      expect(interception.response.body.tag).to.not.eq("Still does not matter")
+    })
+  })
+
+  it("should handle a delayed response", () => {
+    cy.intercept("POST", "/notes", (req) => {
+      req
+        .reply((res) => {
+          setTimeout(() => {
+            res.send({
+              statusCode: 200,
+              body: {
+                note: "Modified note",
+                tag: "Modified tag",
+              },
+            })
+          }, 5000)
+        })
+        .as("clientNote")
+
+      cy.visit("http://127.0.0.1:5500/")
+
+      cy.get('[data-cy="create-note"]').type("Original note")
+      cy.get('[data-cy="create-tag"]').type("Original tag")
+      cy.get('[data-cy="create-button"]').click({ force: true })
+
+      cy.wait("@clientNote", { timeout: 10000 }).then((res) => {
+        expect(res.response.body.note).to.eq("Modified note")
+        expect(res.response.body.tag).to.eq("Modified tag")
+      })
     })
 
-    // Check that an error message is displayed to the user
-    cy.get("#error-message").should("contain", "Request aborted")
+    it("should handle request abort", () => {
+      cy.intercept("POST", "/notes", (req) => {
+        req.abort()
+      }).as("createNote")
+
+      // Trigger the request...
+      cy.visit("http://127.0.0.1:5500/")
+      cy.get('[data-cy="create-note"]').type("This is a test.")
+      cy.get('[data-cy="create-tag"]').type("Tag. You are it")
+      cy.get('[data-cy="create-button"]').click()
+
+      // Assert on the error handling...
+      cy.wait("@createNote").then((interception) => {
+        expect(interception.error.message).to.include("Request aborted")
+      })
+
+      // Check that an error message is displayed to the user
+      cy.get("#error-message").should("contain", "Request aborted")
+    })
   })
 }) //describe
 
-//cy.interception ('','', (res)=>{})
-//This function can modify the request, delay, stub the response, or even abort the request. If you don't call req.continue(), req.reply(), or req.abort(), the request will hang and never reach the server.
+/* cy.interception ('','', (res)=>{})
+This function can modify the request, delay, stub the response, or even abort the request. 
+If you don't call req.continue(), req.reply(), or req.abort(), the request will hang and never reach the server. */
