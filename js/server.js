@@ -105,6 +105,9 @@ app.delete("/notes/:id", (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+// Use the PORT environment variable provided by Heroku or default to 3000
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
+
